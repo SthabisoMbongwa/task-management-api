@@ -4,7 +4,7 @@ const app = express();
 
 require('dotenv').config();
 require('./db');
-const PORT = process.env.PORT;
+const PORT = 8000;
 
 app.use(bodyParser.json());
 
