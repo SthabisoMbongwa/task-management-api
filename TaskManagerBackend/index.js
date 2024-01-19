@@ -9,8 +9,8 @@ require('./db');
 const PORT = 8000;
 
 app.use(bodyParser.json());
-app.use('./users', userRoutes);
-app.use('./tasks', taskRoutes);
+app.use('/users', userRoutes);
+app.use('/tasks', taskRoutes);
 
 app.get('/', (req, res) => {
     res.json({
