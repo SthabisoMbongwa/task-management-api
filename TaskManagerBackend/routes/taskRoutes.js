@@ -3,6 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 const auth = require('../middlewares/auth')
+const Task = require('../models/Task');
 
 router.get('/test',auth, (req, res) => {
     res.json({
@@ -16,7 +17,7 @@ router.get('/test',auth, (req, res) => {
 //Create a task
 router.post('/', auth, async (req, res) => {
     try{
-        
+
     }
 })
 
