@@ -69,6 +69,7 @@ router.get('/:id', auth, async (req, res) => {
 router.patch('/:id', auth, async (req, res) => {
     const taskid = req.params.id; 
     const updates = Object.keys(req.body);
+    const allowedUpdates = ['description', 'completed'];
 
     try{
           const task = await Task.findOne({
