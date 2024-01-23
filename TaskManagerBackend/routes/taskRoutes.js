@@ -54,11 +54,16 @@ router.get('/:id', auth, async (req, res) => {
             _id: taskid,
             owner: req.user_id
           });
+          if(!task){
+            return res.status(404).json({message: "Task not found"});
+          }
+          res.status(200).json({task, message: "Task Fetched Successfully"});
     }
     catch(err){
         res.status(500).send({error: err});
     }
 })
+
 module.exports = router;
 
 
