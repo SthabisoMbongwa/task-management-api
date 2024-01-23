@@ -44,4 +44,11 @@ router.get('/', auth, async(req, res) => {
     }
 });
 
+//fetch a task by id
+
+router.get('/:id', auth, async (req, res) => {
+    const taskid = req.params.id;
+})
 module.exports = router;
+
+
