@@ -48,6 +48,16 @@ router.get('/', auth, async(req, res) => {
 
 router.get('/:id', auth, async (req, res) => {
     const taskid = req.params.id;
+
+    try{
+          const task = await Task.findOne({
+            _id: taskid,
+            owner: req.user_id
+          });
+    }
+    catch(err){
+        res.status(500).send({error: err});
+    }
 })
 module.exports = router;
 
