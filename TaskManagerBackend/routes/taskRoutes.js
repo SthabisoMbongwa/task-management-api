@@ -105,4 +105,30 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
+// Share a task with another user
+router.patch('/:id/share/:userId', auth, async (req, res) => {
+    const taskid = req.params.id;
+    const userIdToShareWith = req.params.userId;
+
+    try {
+        const task = await Task.findById(taskid);
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        if (task.owner.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Not authorized to share this task" });
+        }
+
+        task.shared_with.push(userIdToShareWith);
+        await task.save();
+
+        res.json({
+            message: "Task Shared Successfully",
+        });
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+});
+
 module.exports = router;
