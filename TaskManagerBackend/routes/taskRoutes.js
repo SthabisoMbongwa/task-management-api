@@ -62,4 +62,32 @@ router.get('/:id', auth, async (req, res) => {
     }
 });
 
+// Update a task by id
+router.patch('/:id', auth, async (req, res) => {
+    const taskid = req.params.id;
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['title', 'description', 'category', 'priority', 'due_date', 'completed', 'status'];
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+        return res.status(400).json({ error: "Invalid Updates" });
+    }
+
+    try {
+        const task = await Task.findOne({ _id: taskid, owner: req.user._id });
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        updates.forEach(update => task[update] = req.body[update]);
+        await task.save();
+
+        res.json({
+            message: "Task Updated Successfully",
+        });
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+});
+
 module.exports = router;
