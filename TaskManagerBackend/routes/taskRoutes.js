@@ -131,4 +131,30 @@ router.patch('/:id/share/:userId', auth, async (req, res) => {
     }
 });
 
+// Set a reminder for a task
+router.patch('/:id/set-reminder', auth, async (req, res) => {
+    const taskid = req.params.id;
+    const reminderTime = req.body.reminder;
+
+    try {
+        const task = await Task.findById(taskid);
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        if (task.owner.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Not authorized to set a reminder for this task" });
+        }
+
+        task.reminder = reminderTime;
+        await task.save();
+
+        res.json({
+            message: "Reminder Set Successfully",
+        });
+    } catch (err) {
+        res.status(500).send({ error: err });
+    }
+});
+
 module.exports = router;
