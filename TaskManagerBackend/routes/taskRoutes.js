@@ -33,16 +33,19 @@ router.post('/', auth, async (req, res) => {
 });
 
 
-// get user tasks
+// get user tasks, including shared tasks
 router.get('/', auth, async(req, res) => {
-    try{
+    try {
+        // Find tasks where the user is the owner or is included in the shared_with array
         const tasks = await Task.find({
-            owner: req.user._id
-        })
-        res.status(200).json({tasks, count: tasks.length, message: "Tasks Fetched Successfuly"});
-    }
-    catch(err){
-        res.status(500).send({error: err});
+            $or: [
+                { owner: req.user._id },
+                { shared_with: req.user._id }
+            ]
+        });
+        res.status(200).json({ tasks, count: tasks.length, message: "Tasks Fetched Successfully" });
+    } catch (err) {
+        res.status(500).send({ error: err });
     }
 });
 

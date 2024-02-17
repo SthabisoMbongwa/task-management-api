@@ -52,4 +52,3 @@ router.post('/login', async (req, res) => {
 //register a user
 //login a user
 module.exports = router;
-
