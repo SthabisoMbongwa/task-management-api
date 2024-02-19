@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }], // Add this line
-    role: {type: String, enum: ['user', 'admin'], default: 'user'},
+    role: {type: String, enum: ['user', 'admin'], default: 'admin'},
     status: {type: String, enum: ['Active', 'Inactive'], default: 'Active'}
 }, {
     timestamps: true

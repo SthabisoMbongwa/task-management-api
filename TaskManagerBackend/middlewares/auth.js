@@ -27,6 +27,10 @@ const auth = async (req, res, next) => {
             throw new Error('Unable to login, invalid credentials');
         }
 
+        if (user.role !== 'admin') {
+            return res.status(403).send({ error: 'User is not an admin' });
+        }
+
         req.user = user;
         req.token = token;
         next();
