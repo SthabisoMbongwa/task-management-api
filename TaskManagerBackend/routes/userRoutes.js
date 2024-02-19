@@ -1,12 +1,11 @@
 // userRoutes.js
-
 const express = require('express');
-const User = require('../models/User');
+const User = require('../models/User.js');
+const Task = require('../models/Task.js'); // Import the Task model
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const auth = require('../middlewares/auth'); // Import the auth middleware
-
 
 
 router.get('/', (req, res) => {
@@ -47,15 +46,25 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Fetch all users for admin
 router.get('/all', auth, async (req, res) => {
     try {
         const users = await User.find();
-        res.status(200).json({ users, message: "Users Fetched Successfully" });
+        const userData = await Promise.all(users.map(async (user) => {
+            const taskCount = await Task.countDocuments({ owner: user._id });
+            return {
+                id: user._id,
+                email: user.email,
+                tasks: taskCount,
+                registrationDate: user.createdAt,
+                status: user.status
+            };
+        }));
+        res.status(200).json({ userData, message: "Users Fetched Successfully" });
     } catch (err) {
-        res.status(500).send({ error: err });
+        res.status(500).send({ error: err.message });
     }
 });
+
 
 router.patch('/:id/status', auth, async (req, res) => {
     const userId = req.params.id;

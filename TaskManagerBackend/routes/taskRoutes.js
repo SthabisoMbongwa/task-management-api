@@ -14,6 +14,7 @@ router.get('/test',auth, (req, res) => {
 
 //CRUD tasks
 
+/// Create a task
 // Create a task
 router.post('/', auth, async (req, res) => {
     try {
@@ -31,6 +32,7 @@ router.post('/', auth, async (req, res) => {
         res.status(400).send({ error: err });
     }
 });
+
 
 
 // get user tasks, including shared tasks
